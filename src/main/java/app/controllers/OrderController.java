@@ -56,7 +56,7 @@ public class OrderController {
 
 
     @PostMapping("/post")
-    public Order createOrder(@RequestBody final UserInfo userInfo, @RequestBody final Cart cart) throws OrderNotFoundException, ItemNotFoundException
+    public void createOrder(@RequestBody final UserInfo userInfo, @RequestBody final Cart cart) throws OrderNotFoundException, ItemNotFoundException
     {
         orderService.sendOrderEmail(userInfo, cart);
     }
