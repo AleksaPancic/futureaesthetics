@@ -2,6 +2,8 @@ package app.service;
 
 import app.exceptions.ItemNotFoundException;
 import app.exceptions.OrderNotFoundException;
+import app.models.dto.Cart;
+import app.models.dto.UserInfo;
 import app.models.entities.Order;
 import app.models.entities.OrderItem;
 import java.math.BigDecimal;
@@ -20,7 +22,7 @@ public interface OrderService {
     List<Order> findAllOrders();
     List<OrderItem> getItemsWithinOrder(Long orderId) throws OrderNotFoundException;
     BigDecimal getOrderTotal(Long orderId) throws OrderNotFoundException, ItemNotFoundException;
-    Order createOrder(Order newOrder, OrderItem newOrderItem) throws OrderNotFoundException, ItemNotFoundException;
+    void sendOrderEmail(UserInfo userInfo, Cart cart);
     Order updateOrder(OrderItem newOrderItem, Long orderId) throws OrderNotFoundException, ItemNotFoundException;
 
 

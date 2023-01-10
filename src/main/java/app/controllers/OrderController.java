@@ -3,6 +3,8 @@ package app.controllers;
 
 import app.exceptions.ItemNotFoundException;
 import app.exceptions.OrderNotFoundException;
+import app.models.dto.Cart;
+import app.models.dto.UserInfo;
 import app.models.entities.Order;
 import app.models.entities.OrderItem;
 import app.service.OrderService;
@@ -54,9 +56,9 @@ public class OrderController {
 
 
     @PostMapping("/post")
-    public Order createOrder(@RequestBody final Order newOrder, @RequestBody final OrderItem orderItem) throws OrderNotFoundException, ItemNotFoundException
+    public Order createOrder(@RequestBody final UserInfo userInfo, @RequestBody final Cart cart) throws OrderNotFoundException, ItemNotFoundException
     {
-        return orderService.createOrder(newOrder, orderItem);
+        orderService.sendOrderEmail(userInfo, cart);
     }
 
     @PostMapping("/update/{id}")

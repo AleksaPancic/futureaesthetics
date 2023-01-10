@@ -2,17 +2,23 @@ package app.service.impl;
 
 import app.exceptions.ItemNotFoundException;
 import app.exceptions.OrderNotFoundException;
+import app.models.dto.Cart;
+import app.models.dto.UserInfo;
+import app.models.entities.Mail;
 import app.models.entities.Order;
 import app.models.entities.OrderItem;
 import app.repository.ItemRepository;
 import app.repository.OrderRepository;
+import app.service.EmailSenderService;
 import app.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.support.QuerydslJpaRepository;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +28,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private final OrderRepository orderRepository;
+
+    private EmailSenderService emailSenderService;
 
     public Order findOrder(Long id) throws OrderNotFoundException {
         return orderRepository.findById(id)
@@ -92,23 +100,36 @@ public class OrderServiceImpl implements OrderService {
         return total;
     }
 
-    @Override //create order with one item inside
-    public Order createOrder(Order newOrder, OrderItem newOrderItem) throws OrderNotFoundException, ItemNotFoundException {
+    @Override //send Email for order
+    public void sendOrderEmail(UserInfo userInfo, Cart cart)  {
         //save without total
-        Order savedOrder = orderRepository.save(newOrder);
+//        Order savedOrder = orderRepository.save(newOrder);
+//
+//        //create orderItem and put it into a List
+//        OrderItem item = orderItemRepository.save(newOrderItem);
+//        List<OrderItem> firstItem = List.of(item);
+//
+//        //set a newly created orderItem inside a list in new order
+//        savedOrder.setOrderedItems(firstItem);
+//
+//        //calculate total of savedOrder and set it
+//        savedOrder.setTotal(item.getSum());
 
-        //create orderItem and put it into a List
-        OrderItem item = orderItemRepository.save(newOrderItem);
-        List<OrderItem> firstItem = List.of(item);
+        Mail mail = new Mail();
+        mail.setMailTo(userInfo.getEmail());
 
-        //set a newly created orderItem inside a list in new order
-        savedOrder.setOrderedItems(firstItem);
+        Map<String, Object> model = new HashMap<String, Object>();
 
-        //calculate total of savedOrder and set it
-        savedOrder.setTotal(item.getSum());
+        //stavi sve potrebne stvari u model
+        model.put("username", userInfo.getUsername());
+        model.put("email", userInfo.getEmail());
+        model.put("phone", userInfo.getPhone());
+        model.put("address", userInfo.getAddress());
+        mail.setProps(model);
+        emailSenderService.send(mail);
 
         //save it and return
-        return orderRepository.save(savedOrder);
+        //return orderRepository.save(savedOrder);
     }
 
     @Override //part of order

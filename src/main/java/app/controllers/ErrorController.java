@@ -14,29 +14,25 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class ErrorController {
     @ExceptionHandler(CategoryNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public MessageMaker categoryNotFound(final CategoryNotFoundException e)
-    {
+    public MessageMaker categoryNotFound(final CategoryNotFoundException e) {
         return new MessageMaker(e.getMessage(), MessageMaker.ErrorCode.CATEGORY_NOT_FOUND);
     }
 
     @ExceptionHandler(ProductNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public MessageMaker productNotFound(final ProductNotFoundException e)
-    {
+    public MessageMaker productNotFound(final ProductNotFoundException e) {
         return new MessageMaker(e.getMessage(), MessageMaker.ErrorCode.PRODUCT_NOT_FOUND);
     }
 
     @ExceptionHandler(OrderNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public MessageMaker orderNotFound(final OrderNotFoundException e)
-    {
+    public MessageMaker orderNotFound(final OrderNotFoundException e) {
         return new MessageMaker(e.getMessage(), MessageMaker.ErrorCode.ORDER_NOT_FOUND);
     }
 
     @ExceptionHandler(ItemNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public MessageMaker itemNotFound(final ItemNotFoundException e)
-    {
+    public MessageMaker itemNotFound(final ItemNotFoundException e) {
         return  new MessageMaker(e.getMessage(), MessageMaker.ErrorCode.ITEM_NOT_FOUND);
     }
 
